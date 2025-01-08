@@ -1,15 +1,19 @@
 <script setup>
-import HelloWorld from "./components/HelloWorld.vue"
+import Home from "./components/Home.vue"
 import NavBar from "./components/NavBar.vue"
 </script>
 
 <template>
 	<div>
-		<NavBar />
-		<main>
-			<h2>歡迎使用訂單管理</h2>
-			<p>開始管理訂單吧</p>
-		</main>
+		<nav>
+			<router-link to="/">Home</router-link>
+			|
+			<router-link to="/nav">NavBar</router-link>
+		</nav>
+		<router-view></router-view>
+		<!-- 用於顯示當前路由的組件 -->
+
+		<!-- <NavBar /> -->
 	</div>
 	<!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>

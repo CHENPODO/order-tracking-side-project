@@ -1,6 +1,9 @@
 import { createApp } from "vue"
-import "./style.css"
-import "./assets/tailwind.css"
 import App from "./App.vue"
+import router from "./router" // 確保這裡是正確的路由實例
+import "./assets/tailwind.css"
+import "./assets/style.css"
 
-createApp(App).mount("#app")
+const app = createApp(App)
+app.use(router)
+app.mount("#app")
