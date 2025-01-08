@@ -12,10 +12,7 @@ import NavBar from "./components/NavBar.vue"
 		</nav>
 		<router-view></router-view>
 		<!-- 用於顯示當前路由的組件 -->
-
-		<!-- <NavBar /> -->
 	</div>
-	<!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>
 
 <style scoped>

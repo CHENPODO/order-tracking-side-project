@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
+import { ElMessage } from "element-plus"
 const router = useRouter() // 獲取 router 實例
 
 const isLogin = ref(false)
@@ -8,13 +9,14 @@ const isLogin = ref(false)
 const login = () => {
 	isLogin.value = true
 	localStorage.setItem("isLogin", "true") // 登入成功後，將isLogin設為true
+	ElMessage.success("登入成功")
 	console.log("登入成功")
 }
 const logout = () => {
 	isLogin.value = false
 	localStorage.removeItem("isLogin") // 登出後，將isLogin設為false
 	router.push("/") // 導航到首頁或指定頁面
-
+	ElMessage.success("登出成功")
 	console.log("登入失敗，請重新登入")
 }
 onMounted(() => {
