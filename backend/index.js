@@ -18,13 +18,13 @@ app.get("/users", async (req, res) => {
 	try {
 		const users = await prisma.users.findMany()
 		res.json(users)
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ message: "查詢失敗" })
 	}
 })
 
-//get single user get
+//get single user
 app.get("/users/:id", async (req, res) => {
 	const { id } = req.params //取得id
 	try {
@@ -35,7 +35,7 @@ app.get("/users/:id", async (req, res) => {
 			return res.status(404).json({ message: "查無該用戶" })
 		}
 		res.json(user)
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500), json({ message: "查無該用戶" })
 	}
@@ -52,7 +52,7 @@ app.post("/users", async (req, res) => {
 			data: { name, email, password },
 		})
 		res.json(NewUser)
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ message: "創建用戶失敗" })
 	}
@@ -86,7 +86,7 @@ app.post("/orders", async (req, res) => {
 			},
 		})
 		res.status(201).json("成功紀錄")
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ message: "訂餐失敗" })
 	}
@@ -98,13 +98,13 @@ app.get("/orders/:id/meals", async (req, res) => {
 	try {
 		const UserOrder = await prisma.orders.findMany({
 			where: {
-				order_id: Number(id),
+				id: Number(id),
 			},
 		})
 		if (!UserOrder.length) {
 			return res.status(404).json({ message: "沒有此訂單" })
 		}
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ message: "查無該筆訂單" })
 	}
@@ -115,6 +115,14 @@ app.put("/users/:id", async (req, res) => {
 	const { id } = req.params //get id
 	const { name, email, password } = req.body //get data
 	try {
+		const user = await prisma.users.findUnique({
+			where: { id: Number(id) },
+		})
+
+		if (!user) {
+			return res.status(404).json({ message: "查無用戶" })
+		}
+
 		const UpdateUser = await prisma.users.update({
 			where: { id: Number(id) },
 			data: {
@@ -123,12 +131,9 @@ app.put("/users/:id", async (req, res) => {
 				password,
 			},
 		})
+
 		res.status(200).json(UpdateUser)
-		if (!user) {
-			return res.status(404).json({ message: "查無用戶" })
-		}
-		res.json(user)
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ message: "修改用戶失敗" })
 	}
@@ -151,7 +156,7 @@ app.delete("/users/:id", async (req, res) => {
 			where: { id: Number(id) },
 		})
 		res.status(200).json(DeleteUser)
-	} catch {
+	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ message: "刪除失敗" })
 	}
