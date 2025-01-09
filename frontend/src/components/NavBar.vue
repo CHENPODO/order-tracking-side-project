@@ -2,20 +2,30 @@
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
-const router = useRouter() // 獲取 router 實例
+const router = useRouter() // 獲取 router
 
 const isLogin = ref(false)
 
 const login = () => {
 	isLogin.value = true
 	localStorage.setItem("isLogin", "true") // 登入成功後，將isLogin設為true
-	ElMessage.success("登入成功")
+	ElMessage({
+		message: "登入成功",
+		type: "success",
+		duration: 3000, // 顯示3秒
+		showClose: true, // 添加關閉按鈕
+	})
 }
 const logout = () => {
 	isLogin.value = false
 	localStorage.removeItem("isLogin") // 登出後，將isLogin設為false
 	router.push("/") // 導航到首頁或指定頁面
-	ElMessage.success("登出成功")
+	ElMessage({
+		message: "登出成功",
+		type: "success",
+		duration: 3000, // 顯示3秒
+		showClose: true, // 添加關閉按鈕
+	})
 }
 onMounted(() => {
 	const saveStatus = localStorage.getItem("isLogin") // 取得localStorage的isLogin
