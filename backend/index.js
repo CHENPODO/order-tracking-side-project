@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000 //優先從環境變數取得PORT
 app.use(cors())
 app.use(express.json()) //解析json格式的請求
 
-//get all users get
+//get all users
 app.get("/users", async (req, res) => {
 	try {
 		const users = await prisma.users.findMany()
@@ -107,6 +107,53 @@ app.get("/orders/:id/meals", async (req, res) => {
 	} catch {
 		console.error(error)
 		return res.status(500).json({ message: "查無該筆訂單" })
+	}
+})
+
+//update user
+app.put("/users/:id", async (req, res) => {
+	const { id } = req.params //get id
+	const { name, email, password } = req.body //get data
+	try {
+		const UpdateUser = await prisma.users.update({
+			where: { id: Number(id) },
+			data: {
+				name,
+				email,
+				password,
+			},
+		})
+		res.status(200).json(UpdateUser)
+		if (!user) {
+			return res.status(404).json({ message: "查無用戶" })
+		}
+		res.json(user)
+	} catch {
+		console.error(error)
+		return res.status(500).json({ message: "修改用戶失敗" })
+	}
+})
+
+//delete user
+app.delete("/users/:id", async (req, res) => {
+	const { id } = req.params
+	try {
+		//check user
+		const user = await prisma.users.findUnique({
+			where: { id: Number(id) },
+		})
+		if (!user) {
+			return res.status(404).json({ message: "查無該用戶" })
+		}
+
+		//delete user
+		const DeleteUser = await prisma.users.delete({
+			where: { id: Number(id) },
+		})
+		res.status(200).json(DeleteUser)
+	} catch {
+		console.error(error)
+		return res.status(500).json({ message: "刪除失敗" })
 	}
 })
 
